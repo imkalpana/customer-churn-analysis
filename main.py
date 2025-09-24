@@ -12,3 +12,5 @@ import pandas as pd
 
 df = pd.read_csv('telco_customer_churn_dataset.csv')
 print(df)
+
+# add a class to visualise to statistics 
