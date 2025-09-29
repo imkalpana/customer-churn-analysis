@@ -34,7 +34,8 @@ class ChurnPredictor:
     def plot_churn_distribution(self):
         sns.countplot(x='Churn', data=self.df)
         plt.title('Churn Distribution')
-        plt.show()
+        plt.savefig('churn_distribution.png')
+        plt.close()
 
     def plot_churn_distribution1(self):
         if 'Churn' in self.df.columns:
@@ -51,4 +52,4 @@ class ChurnPredictor:
 
 visualizer = ChurnPredictor(df)
 #visualizer.show_summary()
-visualizer.plot_churn_distribution1()
+visualizer.plot_churn_distribution()
