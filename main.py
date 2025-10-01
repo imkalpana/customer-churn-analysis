@@ -17,8 +17,6 @@ df = pd.read_csv('telco_customer_churn_dataset.csv')
 '''
 print(df.head())
 print(df.describe())
-print(df.info())
-print(df.duplicated().sum())
 print(df['TotalCharges'].isnull().sum())
 print(df.dtypes)
 
@@ -26,8 +24,13 @@ print(df.dtypes)
 with pd.option_context('display.max_columns', 22):
     print(df.head())
 
-print(df.dtypes)
+
 '''
+
+print(df.head())
+print(df.info())
+print(df.duplicated().sum())
+print(df.isnull().sum())
 
 # Change the datatype of 'SeniorCitizen' from int to object
 df['SeniorCitizen'] = df['SeniorCitizen'].replace({1: 'Yes', 0: 'No'})
@@ -39,6 +42,22 @@ df['TotalCharges'] = pd.to_numeric(df['TotalCharges'], errors='coerce')
 print(df.dtypes)
 print(df.head())
 print(df.info())
+print(df.isnull().sum())
+
+#Check rows with NaN in 'TotalCharges'
+print(df.loc[df['TotalCharges'].isnull()])
+print(df['TotalCharges'].describe())
+
+df['TotalCharges'].hist()
+plt.title('Total Charges Distribution')
+plt.xlabel('Total Charges')
+plt.ylabel('Frequency')
+plt.savefig('total_charges_distribution.png')
+plt.close()
+
+# Fill NaN with median value
+df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].median())
+
 print(df['TotalCharges'].isnull().sum())
 
 
