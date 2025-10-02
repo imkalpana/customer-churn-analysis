@@ -14,23 +14,22 @@ import matplotlib.pyplot as plt
 
 df = pd.read_csv('telco_customer_churn_dataset.csv')
 
-'''
+# Initial Data Exploration
+print("=================================  Initial Data Exploration  =================================\n")
+
 print(df.head())
 print(df.describe())
-print(df['TotalCharges'].isnull().sum())
-print(df.dtypes)
-
-
-with pd.option_context('display.max_columns', 22):
-    print(df.head())
-
-
-'''
-
-print(df.head())
 print(df.info())
 print(df.duplicated().sum())
 print(df.isnull().sum())
+print(df.dtypes)
+
+
+# Display all columns
+
+print("=================================  All Columns  =================================\n")
+with pd.option_context('display.max_columns', 22):
+    print(df.head())
 
 # Change the datatype of 'SeniorCitizen' from int to object
 df['SeniorCitizen'] = df['SeniorCitizen'].replace({1: 'Yes', 0: 'No'})
@@ -60,7 +59,34 @@ df['TotalCharges'] = df['TotalCharges'].fillna(df['TotalCharges'].median())
 
 print(df['TotalCharges'].isnull().sum())
 
+# Check unique values in categorical columns
+print("=================================  Unique Values in Categorical Columns  =================================\n")
+print(df.nunique())
 
+print(df.describe(include=['object']))
+
+'''
+# most customers
+- male
+- younger than 65
+- have no partner and no dependents
+- have phone service
+- have fibre optic internet service
+- do not have online services
+- do not have tech support
+- do not have streaming services
+- have month-to-month contract
+- do not have paperless billing and pay by electronic check
+
+'''
+print("=================================  Visualization  =================================\n")
+
+churn = df.groupby('Churn').size()
+print(churn)
+
+# churning rate
+churn_rate = churn[1] / churn.sum()
+print(f"Churn Rate: {churn_rate:.2%}")
 
 class ChurnPredictor:
     def __init__(self, dataframe):
