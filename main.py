@@ -79,7 +79,7 @@ print(df.describe(include=['object']))
 - do not have paperless billing and pay by electronic check
 
 '''
-print("=================================  Visualization  =================================\n")
+print("=================================  EDA  =================================\n")
 
 churn = df.groupby('Churn').size()
 print(churn)
@@ -87,6 +87,44 @@ print(churn)
 # churning rate
 churn_rate = churn[1] / churn.sum()
 print(f"Churn Rate: {churn_rate:.2%}")
+
+
+# Tenure distribution
+sns.histplot(df['tenure'])
+plt.title('Tenure Distribution')
+plt.xlabel('Tenure (Months)')
+plt.ylabel('Number of Customers')
+plt.savefig('tenure_distribution.png')
+plt.close()
+
+'''
+Shows that most customers have a tenure of just a few months, with a significant drop-off after that point.
+This indicates that many customers leave the service shortly after joining. That might be due to recent
+marketing campaigns or promotions attracting new customers who then quickly churn.
+'''
+
+
+# Monthly Charges distribution
+sns.histplot(df['MonthlyCharges'])
+plt.title('Monthly Charges Distribution')
+plt.xlabel('Monthly Charges')
+plt.ylabel('Number of Customers')
+plt.savefig('monthly_charges_distribution.png')
+plt.close()
+
+# Total Charges distribution
+sns.histplot(df['TotalCharges'])
+plt.title('Total Charges Distribution')
+plt.xlabel('Total Charges') 
+plt.ylabel('Number of Customers')
+plt.savefig('total_charges_distribution1.png')
+plt.close()
+
+'''
+most customers pay low monthly charges, but there is a great fraction with medium values. 
+Since most customers have been with the company for just a few months, the total charges plot shows most 
+customers with low values.
+'''
 
 class ChurnPredictor:
     def __init__(self, dataframe):
