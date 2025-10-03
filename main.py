@@ -27,7 +27,7 @@ print(df.dtypes)
 
 # Display all columns
 
-print("=================================  All Columns  =================================\n")
+print("===========================================  All Columns  ===============================================\n")
 with pd.option_context('display.max_columns', 22):
     print(df.head())
 
@@ -79,18 +79,21 @@ print(df.describe(include=['object']))
 - do not have paperless billing and pay by electronic check
 
 '''
-print("=================================  EDA  =================================\n")
+print("=========================================  EDA  =================================================\n")
+
+
+# Univariate Analysis
 
 churn = df.groupby('Churn').size()
 print(churn)
 
 # churning rate
-churn_rate = churn[1] / churn.sum()
+churn_rate = churn.iloc[1] / churn.sum()
 print(f"Churn Rate: {churn_rate:.2%}")
 
 
 # Tenure distribution
-sns.histplot(df['tenure'])
+sns.histplot(df['tenure'], kde=True)
 plt.title('Tenure Distribution')
 plt.xlabel('Tenure (Months)')
 plt.ylabel('Number of Customers')
@@ -105,7 +108,7 @@ marketing campaigns or promotions attracting new customers who then quickly chur
 
 
 # Monthly Charges distribution
-sns.histplot(df['MonthlyCharges'])
+sns.histplot(df['MonthlyCharges'], kde=True)
 plt.title('Monthly Charges Distribution')
 plt.xlabel('Monthly Charges')
 plt.ylabel('Number of Customers')
@@ -113,7 +116,7 @@ plt.savefig('monthly_charges_distribution.png')
 plt.close()
 
 # Total Charges distribution
-sns.histplot(df['TotalCharges'])
+sns.histplot(df['TotalCharges'], kde=True)
 plt.title('Total Charges Distribution')
 plt.xlabel('Total Charges') 
 plt.ylabel('Number of Customers')
@@ -125,6 +128,52 @@ most customers pay low monthly charges, but there is a great fraction with mediu
 Since most customers have been with the company for just a few months, the total charges plot shows most 
 customers with low values.
 '''
+
+
+
+# Bivariate Analysis
+
+
+# Contract Type distribution
+contract = df.groupby('Contract').size()
+print(contract)
+
+
+# Tenure vs. Contract
+sns.histplot(x='tenure', hue='Contract', data=df, kde=True)
+plt.title('Tenure distribution by Contract Type')
+plt.xlabel('Tenure (Months)')
+plt.ylabel('Number of Customers')
+plt.savefig('tenure_by_contract.png')
+plt.close()
+'''
+Customers with month-to-month contracts tend to have shorter tenures, while those with one-year and two-year contracts have longer tenures.
+This suggests that longer-term contracts may help retain customers for a longer period.
+'''
+
+# churn_rate_contract = contract.iloc[1] / churn.sum()
+# print(f"Churn Rate by Contract Type: {churn_rate_contract:.2%}")
+
+# Churn rate by contract type
+# churn_by_contract = df.groupby(['Contract', 'Churn']).size().unstack()
+# print(churn_by_contract)
+# churn_by_contract_percent = churn_by_contract.iloc[0] / churn.sum()
+# print(churn_by_contract_percent)
+
+# Plot churn rate by contract type
+churn_rate_by_contract = df.groupby('Contract')['Churn'].value_counts(normalize=True).unstack().fillna(0)
+print(churn_rate_by_contract)
+churn_rate_by_contract['Yes'].plot(x='Churn', kind='bar')
+plt.title('Churn Rate by Contract Type')
+plt.xlabel('Contract Type')
+plt.ylabel('Churn Rate')
+plt.ylim(0, 0.5)
+for idx, val in enumerate(churn_rate_by_contract['Yes']):
+    plt.text(idx, val + 0.01, f"{val:.0%}", ha='center')
+plt.tight_layout()
+
+plt.savefig('churn_rate_by_contract.png')
+plt.close()
 
 class ChurnPredictor:
     def __init__(self, dataframe):
