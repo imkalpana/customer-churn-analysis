@@ -128,9 +128,6 @@ most customers pay low monthly charges, but there is a great fraction with mediu
 Since most customers have been with the company for just a few months, the total charges plot shows most 
 customers with low values.
 '''
-
-
-
 # Bivariate Analysis
 
 
@@ -151,29 +148,69 @@ Customers with month-to-month contracts tend to have shorter tenures, while thos
 This suggests that longer-term contracts may help retain customers for a longer period.
 '''
 
-# churn_rate_contract = contract.iloc[1] / churn.sum()
-# print(f"Churn Rate by Contract Type: {churn_rate_contract:.2%}")
-
-# Churn rate by contract type
-# churn_by_contract = df.groupby(['Contract', 'Churn']).size().unstack()
-# print(churn_by_contract)
-# churn_by_contract_percent = churn_by_contract.iloc[0] / churn.sum()
-# print(churn_by_contract_percent)
-
 # Plot churn rate by contract type
-churn_rate_by_contract = df.groupby('Contract')['Churn'].value_counts(normalize=True).unstack().fillna(0)
+churn_rate_by_contract = df.groupby('Contract')['Churn'].value_counts(normalize=True).unstack()
 print(churn_rate_by_contract)
-churn_rate_by_contract['Yes'].plot(x='Churn', kind='bar')
+
+
+churn_rate_by_contract['Yes'].plot(kind='bar')
 plt.title('Churn Rate by Contract Type')
 plt.xlabel('Contract Type')
 plt.ylabel('Churn Rate')
 plt.ylim(0, 0.5)
 for idx, val in enumerate(churn_rate_by_contract['Yes']):
-    plt.text(idx, val + 0.01, f"{val:.0%}", ha='center')
+    plt.text(idx, val + 0.01, f"{val:.1%}", ha='center')
 plt.tight_layout()
 
 plt.savefig('churn_rate_by_contract.png')
 plt.close()
+'''
+Customers with month-to-month contracts have a significantly higher churn rate around 43%
+compared to those with one-year (11%) or two-year contracts (7%).
+'''
+
+
+
+#Churning trends by internet service type
+churn_rate_by_internet = df.groupby('InternetService')['Churn'].value_counts(normalize=True).unstack()
+print(churn_rate_by_internet)
+
+churn_rate_by_internet['Yes'].plot(kind='bar', color=['skyblue', 'orange', 'lightgreen'])
+plt.title('Churn Rate by Internet Service Type')
+plt.xlabel('Internet Service Type')
+plt.ylabel('Churn Rate')
+plt.ylim(0, 0.5)
+for idx, val in enumerate(churn_rate_by_internet['Yes']):
+    plt.text(idx, val + 0.01, f"{val:.1%}", ha='center')
+plt.tight_layout()
+
+plt.savefig('churn_rate_by_internet.png')
+plt.close()
+'''
+Customers with Fiber optic internet service have a significantly higher churn rate around 42% 
+compared to those with DSL (19%) or no internet service (7%).
+'''
+
+#Churn rate by payment method
+churn_rate_by_payment = df.groupby('PaymentMethod')['Churn'].value_counts(normalize=True).unstack()
+print(churn_rate_by_payment)
+
+churn_rate_by_payment['Yes'].plot(kind='bar', color=['skyblue', 'orange', 'lightgreen'])
+plt.title('Churn Rate by Payment Method')
+plt.xlabel('Payment Method')
+plt.ylabel('Churn Rate')
+plt.ylim(0, 0.5)
+for idx, val in enumerate(churn_rate_by_payment['Yes']):
+    plt.text(idx, val + 0.01, f"{val:.1%}", ha='center')
+plt.tight_layout()
+
+plt.savefig('churn_rate_by_payment.png')
+plt.close()
+'''
+Customers who pay by electronic check have a significantly higher churn rate around 41% 
+compared to those who pay by mailed check (15%) or credit card (10%).
+'''
+
 
 class ChurnPredictor:
     def __init__(self, dataframe):
