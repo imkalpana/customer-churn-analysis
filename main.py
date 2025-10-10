@@ -211,25 +211,16 @@ Customers who pay by electronic check have a significantly higher churn rate aro
 compared to those who pay by mailed check (15%) or credit card (10%).
 '''
 
-#Multivariate Analysis
 
-# Churn by monthly charges and tenure
-# High monthly charges + short tenure = highest churn risk
-plt.figure(figsize=(8, 6))
-sns.scatterplot(
-    x='tenure',
-    y='MonthlyCharges',
-    hue='Churn',
-    data=df,
-    alpha=0.6,
-    palette={'Yes': 'red', 'No': 'green'}
-)
-plt.title('Churn by Monthly Charges and Tenure')
-plt.xlabel('Tenure (Months)')
-plt.ylabel('Monthly Charges')
-plt.legend(title='Churn')
-plt.savefig('churn_by_monthlycharges_tenure.png')
-plt.close()
+
+
+
+
+
+
+
+
+
 
 class ChurnPredictor:
     def __init__(self, dataframe):
