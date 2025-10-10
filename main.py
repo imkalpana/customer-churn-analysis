@@ -239,7 +239,41 @@ High monthly charges + short tenure = highest churn risk
 
 #Senior citizens churn rate
 
+# Senior citizens: service preferences and churn patterns (single graph, only SeniorCitizen='Yes')
 
+senior_df = df[df['SeniorCitizen'] == 'Yes']
+
+# Prepare data for plotting
+service_cols = ['PhoneService', 'InternetService', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+service_pref = senior_df[service_cols + ['Churn']]
+
+# Melt the dataframe for seaborn plotting
+melted = service_pref.melt(id_vars='Churn', value_vars=service_cols, var_name='Service', value_name='Preference')
+
+plt.figure(figsize=(12, 6))
+sns.countplot(
+    data=melted,
+    x='Service',
+    hue='Preference',
+    palette='pastel',
+    dodge=True
+)
+plt.title('Senior Citizens: Service Preferences')
+plt.xlabel('Service')
+plt.ylabel('Count')
+plt.legend(title='Preference')
+plt.twinx()  # Add a second y-axis for churn
+
+# Overlay churn pattern as a line plot
+churn_counts = senior_df['Churn'].value_counts(normalize=True)
+plt.plot(['PhoneService', 'InternetService', 'TechSupport', 'StreamingTV', 'StreamingMovies'],
+         [churn_counts.get('Yes', 0)]*5, color='red', marker='o', label='Churn Rate (Yes)')
+plt.ylabel('Churn Rate')
+plt.legend(loc='upper right')
+
+plt.tight_layout()
+plt.savefig('senior_citizen_service_churn_single.png')
+plt.close()
 
 
 
