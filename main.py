@@ -88,7 +88,7 @@ churn = df.groupby('Churn').size()
 print(churn)
 
 # churning rate
-churn_rate = churn.iloc[1] / churn.sum()
+churn_rate = churn.get('Yes', 0) / churn.sum()
 print(f"Churn Rate: {churn_rate:.2%}")
 
 
